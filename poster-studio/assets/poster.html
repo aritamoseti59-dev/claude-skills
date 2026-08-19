@@ -1,0 +1,365 @@
+﻿<!-- POSTER TEMPLATE â€” Prime Moseti system
+     Renders standalone. Copy, fill, render with scripts/render.py.
+     Every value you are meant to change is a custom property in :root
+     or a content block marked FILL. -->
+<style>
+:root {
+  /* ---- canvas ---- */
+  --W: 1600px;
+  --H: 2000px;
+  --safe: 6%;              /* nothing in zones 6-9 crosses this */
+
+  /* ---- colour tokens (see references/design-system.md Â§5) ---- */
+  --ground:  #0C0C0E;
+  --primary: #FFFFFF;
+  --gold:    #E8B84B;
+  --cyan:    #4FC3F7;
+  --red:     #E53935;
+
+  /* ---- T1 display: the ONE thing that varies per event ----
+     Verified faces by voice (references/fonts.md):
+       premium  "Bodoni MT Condensed" | "Bodoni MT Black" | "Baskerville Old Face"
+       hype     "Haettenschweiler" | "Impact" | "Bernard MT Condensed"
+       funk     "Cooper Black" | "Bauhaus 93" | "Showcard Gothic"
+       blunt    "Berlin Sans FB"/bold | "Franklin Gothic Heavy"
+       tech     "Bahnschrift"/bold/condensed | "Agency FB"/bold          */
+  --t1-family:   "Bodoni MT Condensed";
+  --t1-weight:   400;
+  --t1-stretch:  normal;
+  --t1-size:     190px;
+  --t1-leading:  0.86;
+  --t1-tracking: -0.005em;
+
+  /* ---- T2 script: connector only, never load-bearing information ---- */
+  --t2-family: "Freestyle Script";
+  --t2-size:   88px;        /* keep cap height >= 42px or it degrades */
+
+  /* ---- T3 utility: LOCKED. Same face on every poster, always. ---- */
+  --t3-family: "Segoe UI";
+  --t3-bold:   700;
+  --t3-black:  900;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: var(--W); height: var(--H);
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--primary);
+  font-family: var(--t3-family), Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ LAYERS ============
+   0 background Â· 1 scrim Â· 2 talent Â· 3 text
+   Text sits above talent by default so cutouts cannot eat letterforms.
+   Add class "behind" to .title for the deliberate overlap look.       */
+
+.bg, .scrim, .talent { position: absolute; inset: 0; }
+.bg  { z-index: 0; }
+.bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bg--fallback {
+  background:
+    radial-gradient(120% 80% at 70% 12%, #2A2118 0%, transparent 60%),
+    radial-gradient(90% 60% at 20% 85%, #17222B 0%, transparent 60%),
+    var(--ground);
+}
+
+/* Required whenever T1 sits over photography: >=55% at the title's centre.
+   Without it the display face disappears into busy imagery â€” the single
+   most common failure in the reference set. */
+.scrim {
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.34) 34%,
+                    rgba(0,0,0,.20) 55%, rgba(0,0,0,.86) 88%);
+}
+
+/* FULL BLEED. The talent runs past both side edges and off the bottom of the
+   canvas, and zones 5-9 are laid over it. A cutout sitting in a slot in the
+   middle, with a dark panel underneath holding the text, is the single error
+   that makes a poster read as a template. See design-system.md Â§2. */
+.talent { z-index: 2; }
+.talent img {
+  position: absolute;
+  display: block;
+  filter: drop-shadow(0 22px 44px rgba(0,0,0,.62));
+}
+.talent img.tier-2 { filter: grayscale(1) drop-shadow(0 18px 36px rgba(0,0,0,.6)); }
+
+/* Second scrim, ABOVE the talent: darkens the lower body so the text block
+   reads over it. Without this you end up reaching for a black panel instead,
+   which is the slot look. */
+.overscrim {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(10,10,13,0) 55%, rgba(10,10,13,.30) 68%, rgba(10,10,13,.60) 78%,
+    rgba(10,10,13,.90) 85%, rgba(12,12,14,.97) 90%, var(--ground) 96%);
+}
+
+.stage {
+  position: relative; z-index: 4;
+  height: 100%;
+  padding: var(--safe);
+  display: flex; flex-direction: column;
+}
+.spacer { flex: 1 1 auto; }
+
+/* ============ ZONE 1 â€” DATE CHIP ============ */
+.date {
+  align-self: center;
+  background: var(--primary); color: #000;
+  font-weight: var(--t3-bold);
+  font-size: 30px; letter-spacing: .10em;
+  padding: 11px 26px; border-radius: 6px;
+}
+.date--special {                    /* specials alternate: red disc */
+  background: var(--red); color: var(--primary);
+  border-radius: 999px; padding: 26px 22px;
+  line-height: 1.05; text-align: center; font-size: 27px;
+}
+
+/* ============ ZONE 2 â€” PRESENTER LINE ============ */
+.presents {
+  align-self: center; margin-top: 34px;
+  font-size: 25px; font-weight: 400;
+  letter-spacing: .35em; text-transform: uppercase;
+  opacity: .72;
+}
+
+/* ============ ZONE 3 â€” TITLE ============ */
+.title {
+  margin-top: 26px;
+  font-family: var(--t1-family), serif;
+  font-weight: var(--t1-weight);
+  font-stretch: var(--t1-stretch);
+  font-size: var(--t1-size);
+  line-height: var(--t1-leading);
+  letter-spacing: var(--t1-tracking);
+  text-transform: uppercase;
+}
+.title.behind { position: relative; z-index: -1; }
+.title .alt { color: var(--gold); }
+.title .alt2 { color: var(--cyan); }
+
+/* Script sub-title (T2) â€” e.g. "Pre Valentine Party", "Fridays" */
+.subtitle {
+  font-family: var(--t2-family), cursive;
+  font-size: var(--t2-size);
+  text-transform: none;
+  line-height: 1;
+  margin-top: 6px;
+}
+
+/* ============ ZONE 5 â€” CREDITS ============ */
+.credits { text-align: center; }
+.featuring {
+  font-family: var(--t2-family), cursive;
+  font-size: 70px; line-height: 1; margin-bottom: 10px;
+}
+.roster {
+  font-weight: var(--t3-black);
+  font-size: 46px; letter-spacing: .012em;
+  line-height: 1.22; text-transform: uppercase;
+}
+/* The alternation rule, enforced by the template so it cannot be got wrong:
+   names alternate white/gold starting on white; separators alternate
+   gold/cyan independently. Max seven names per line, then start a new
+   .roster line â€” which restarts on white, as the spec requires.
+
+   Must be nth-child with a 4-step, NOT nth-of-type. Names and separators
+   are both spans and they interleave, so nth-of-type makes every name odd
+   and every separator even â€” the alternation silently collapses to one
+   colour each and the poster still looks finished. Children run
+   n,x,n,x,...: 4n+1/4n+3 select alternate names, 4n+2/4n+4 alternate
+   separators. */
+.roster .n:nth-child(4n+1) { color: var(--primary); }
+.roster .n:nth-child(4n+3) { color: var(--gold); }
+.roster .x:nth-child(4n+2) { color: var(--gold); }
+.roster .x:nth-child(4n+4) { color: var(--cyan); }
+.roster .x { font-size: .8em; padding: 0 .34em; }
+
+.stars {
+  text-align: center; margin: 26px 0;
+  font-size: 26px; letter-spacing: .5em; opacity: .6;
+}
+
+/* ============ ZONE 6 â€” VENUE LOCKUP ============ */
+.venue {
+  display: flex; align-items: center; justify-content: center;
+  gap: 30px; margin-top: 18px;
+}
+.venue .mark { width: 96px; height: 62px; flex: none; }
+.venue .bar { width: 2px; align-self: stretch; background: rgba(255,255,255,.42); }
+.venue .cell { text-align: center; }
+.venue .name { font-weight: var(--t3-black); font-size: 62px; line-height: 1.02; }
+.venue .addr {
+  font-weight: var(--t3-bold); font-size: 27px;
+  letter-spacing: .09em; color: var(--gold); margin-top: 4px;
+}
+.venue .aux-l {                   /* the sanctioned extra cell, e.g. dress code */
+  font-weight: var(--t3-bold); font-size: 20px;
+  letter-spacing: .14em; opacity: .8;
+}
+.venue .aux-v { font-weight: var(--t3-black); font-size: 34px; line-height: 1.05; }
+
+/* ============ ZONE 8 â€” RESERVATION / DOORS / PRICE ============ */
+.reserve {
+  display: flex; align-items: center; gap: 22px;
+  margin-top: 24px;
+  font-weight: var(--t3-bold); font-size: 27px; letter-spacing: .06em;
+}
+.reserve::before, .reserve::after {
+  content: ""; flex: 1 1 auto; height: 1px; background: rgba(255,255,255,.4);
+}
+.reserve .sep { opacity: .5; padding: 0 .2em; }
+
+/* ============ ZONE 7 â€” LEGAL ============ */
+.legal {
+  text-align: center; margin-top: 20px;
+  font-weight: 600; font-size: 17px; line-height: 1.45;
+  letter-spacing: .015em; opacity: .82;
+}
+
+/* ============ ZONE 9 â€” SOCIAL FOOTER ============ */
+.social {
+  display: flex; justify-content: center; gap: 44px;
+  margin-top: 20px;
+  font-weight: var(--t3-bold); font-size: 22px; letter-spacing: .05em;
+}
+.social span { display: inline-flex; align-items: center; gap: 10px; }
+.social svg { width: 26px; height: 26px; fill: var(--primary); }
+
+/* ============ SIDE RAIL ============ */
+.rail {
+  position: absolute; z-index: 4;
+  right: 26px; top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-weight: var(--t3-bold); font-size: 20px;
+  letter-spacing: .35em; text-transform: uppercase; opacity: .72;
+}
+
+/* ============ COMPOSITION VARIANTS ============ */
+/* A â€” split: title left column, talent right */
+body.var-a .title      { text-align: left;  max-width: 54%; }
+body.var-a .subtitle   { text-align: left; }
+body.var-a .presents,
+body.var-a .date       { align-self: flex-start; }
+body.var-a .talent img { right: -6%; top: 24%; height: 80%; }
+
+/* B â€” stacked: centred title top third, talent centred below (house default) */
+body.var-b .title,
+body.var-b .subtitle   { text-align: center; }
+body.var-b .talent img { left: 50%; transform: translateX(-50%); top: 26%; height: 78%; }
+
+/* C â€” centred: title holds centre mass, talent flanks */
+body.var-c .title,
+body.var-c .subtitle   { text-align: center; }
+body.var-c .talent img.left  { left: -8%;  top: 24%; height: 80%; }
+body.var-c .talent img.right { right: -8%; top: 24%; height: 80%; }
+</style>
+
+<body class="var-b">
+
+  <!-- LAYER 0 Â· background. Swap the fallback div for a real image:
+       <div class="bg"><img src="assets/bg.jpg" alt=""></div>          -->
+  <div class="bg bg--fallback"></div>
+
+  <!-- LAYER 1 Â· scrim. Required over photography. -->
+  <div class="scrim"></div>
+
+  <!-- LAYER 2 Â· talent cutouts. Add class "tier-2" for support acts
+       (greyscale hierarchy). Position per variant in the CSS above.   -->
+  <!-- LAYER 2 - talent, FULL BLEED: scale so the cutout's crop edge falls
+       BELOW the canvas rather than fading it out; a faded body is the slot
+       look. Outer subjects should be cut by the side edges. -->
+  <div class="talent">
+    <!-- FILL: <img src="assets/cutout-1.png" alt=""> -->
+  </div>
+
+  <!-- Entities, not literal glyphs: this file gets copied and string-edited,
+       and a literal middot mangles to "Ã‚Â·" on an encoding round-trip. -->
+  <div class="overscrim"></div>
+
+  <div class="rail">The Echo Lounge &nbsp;&middot;&nbsp; Daraja Mbili</div>
+
+  <div class="stage">
+
+    <!-- ZONE 1 -->
+    <div class="date">SAT 31ST JAN, 2026</div>
+
+    <!-- ZONE 2 -->
+    <div class="presents">The Echo Lounge Presents</div>
+
+    <!-- ZONE 3 -->
+    <h1 class="title">Saturday<br>at the <span class="alt">Echo</span></h1>
+
+    <div class="spacer"></div>
+
+    <!-- ZONE 5 -->
+    <div class="credits">
+      <div class="featuring">Featuring</div>
+      <div class="roster">
+        <span class="n">Athing</span><span class="x">&#10005;</span><span class="n">Chloe</span><span class="x">&#10005;</span><span class="n">Cyril</span><span class="x">&#10005;</span><span class="n">Elsy</span>
+      </div>
+      <div class="roster">
+        <span class="n">Boko the Mcee</span><span class="x">&#10005;</span><span class="n">Selector Rwoy Ke</span><span class="x">&#10005;</span><span class="n">DJ Radiq</span>
+      </div>
+    </div>
+
+    <div class="stars">* * * * * * * * * * *</div>
+
+    <!-- ZONE 6 -->
+    <div class="venue">
+      <svg class="mark" viewBox="0 0 96 62" aria-hidden="true">
+        <g fill="#fff">
+          <rect x="2"  y="26" width="4" height="10" rx="2"/>
+          <rect x="12" y="18" width="4" height="26" rx="2"/>
+          <rect x="22" y="8"  width="4" height="46" rx="2"/>
+          <rect x="32" y="20" width="4" height="22" rx="2"/>
+          <rect x="42" y="2"  width="4" height="58" rx="2"/>
+          <rect x="52" y="20" width="4" height="22" rx="2"/>
+          <rect x="62" y="8"  width="4" height="46" rx="2"/>
+          <rect x="72" y="18" width="4" height="26" rx="2"/>
+          <rect x="82" y="26" width="4" height="10" rx="2"/>
+        </g>
+      </svg>
+      <div class="bar"></div>
+      <div class="cell">
+        <div class="name">The Echo Lounge</div>
+        <div class="addr">Mko Plaza, Daraja Mbili, Kisii</div>
+      </div>
+      <!-- Sanctioned extra cell â€” add a bar + cell, never anything else:
+      <div class="bar"></div>
+      <div class="cell">
+        <div class="aux-l">Dress Code</div>
+        <div class="aux-v">A Touch<br>of Denim</div>
+      </div> -->
+    </div>
+
+    <!-- ZONE 8 Â· doors and price live here; neither may be omitted silently -->
+    <div class="reserve">
+      <span>Doors 8PM</span><span class="sep">&middot;</span>
+      <span>Gate KSh 500</span><span class="sep">&middot;</span>
+      <span>Reservations 0114 495 011</span>
+    </div>
+
+    <!-- ZONE 7 Â· paste from references/design-system.md, never retype -->
+    <div class="legal">
+      Excessive alcohol consumption is harmful to your health. Do not drink and drive.<br>
+      Alcohol is not for sale to persons under the age of 18 years. Do not forward this to persons under the age of 18 years.
+    </div>
+
+    <!-- ZONE 9 -->
+    <div class="social">
+      <span><svg viewBox="0 0 24 24"><path d="M13.5 22v-9h3l.5-3.5h-3.5V7.2c0-1 .3-1.7 1.8-1.7h1.8V2.4A25 25 0 0 0 14.5 2C12 2 10.2 3.6 10.2 6.5v3H7.2V13h3v9z"/></svg>@theechokenya</span>
+      <span><svg viewBox="0 0 24 24"><path d="M16.5 2h-3v13a2.5 2.5 0 1 1-2.5-2.5c.3 0 .5 0 .7.1V9.5A5.6 5.6 0 1 0 16.5 15V8.4c1 .8 2.3 1.2 3.7 1.3V6.4a4 4 0 0 1-3.7-4.4z"/></svg>@theecho</span>
+      <span><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.6 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 4 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zm0 3.1a6.7 6.7 0 1 0 0 13.4 6.7 6.7 0 0 0 0-13.4zm0 11a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm6.9-11.2a1.6 1.6 0 1 0 0 3.1 1.6 1.6 0 0 0 0-3.1z"/></svg>@theechokenya</span>
+      <span><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.9a15.6 15.6 0 0 0-1.3-3.4A8 8 0 0 1 18.9 8zM12 4c.7 1 1.3 2.4 1.7 4h-3.4c.4-1.6 1-3 1.7-4zM4.3 14a8 8 0 0 1 0-4h3.3a17 17 0 0 0 0 4zm.8 2h2.9c.3 1.2.7 2.4 1.3 3.4A8 8 0 0 1 5.1 16zm2.9-8H5.1a8 8 0 0 1 4.2-3.4C8.7 5.6 8.3 6.8 8 8zM12 20c-.7-1-1.3-2.4-1.7-4h3.4c-.4 1.6-1 3-1.7 4zm2.1-6H9.9a15 15 0 0 1 0-4h4.2a15 15 0 0 1 0 4zm.6 5.4c.6-1 1-2.2 1.3-3.4h2.9a8 8 0 0 1-4.2 3.4zm1.7-5.4a17 17 0 0 0 0-4h3.3a8 8 0 0 1 0 4z"/></svg>www.primemoseti.co.ke</span>
+    </div>
+
+  </div>
+</body>
+

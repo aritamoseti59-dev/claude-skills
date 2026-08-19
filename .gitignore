@@ -1,0 +1,21 @@
+# Skills supplied by the cloudflare@cloudflare plugin — byte-identical to the
+# plugin's copies. Reinstalled automatically from settings.json enabledPlugins.
+agents-sdk/
+cloudflare/
+cloudflare-email-service/
+cloudflare-one/
+cloudflare-one-migrations/
+durable-objects/
+sandbox-migrate-to-next/
+sandbox-next/
+sandbox-stable/
+turnstile-spin/
+web-perf/
+workers-best-practices/
+wrangler/
+
+# Third-party skills with their own upstream repos — re-clone, don't vendor.
+# agent-skills  -> https://github.com/addyosmani/agent-skills
+# task-observer -> https://github.com/rebelytics/one-skill-to-rule-them-all
+agent-skills/
+task-observer/

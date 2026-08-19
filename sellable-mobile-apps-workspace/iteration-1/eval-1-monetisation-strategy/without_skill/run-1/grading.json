@@ -1,0 +1,56 @@
+{
+  "eval_id": 1,
+  "eval_name": "monetisation-strategy",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Performs explicit per-user margin arithmetic: requests per month multiplied by cost per request, compared against the subscription price",
+      "passed": true,
+      "evidence": "\"One nudge a day. Call it ~2,000 input tokens... That's ~66k tokens in and ~6k out per user per month.\" with a per-model monthly cost table, then \"So: $4.24 revenue against $0.27 of inference is a ~94% gross margin. Even on an Opus-class model you're at ~68%.\""
+    },
+    {
+      "text": "Flags that the cost risk is driven by heavy/p99 users rather than the average user",
+      "passed": false,
+      "evidence": "The stated 'landmine' is free-tier subsidy, not heavy users: \"Cost per *paying* user is not the number that matters. Cost per *user* is.\" The only adjacent line is conditional and future-tense \u2014 \"unbounded turns per user is where AI app economics actually go wrong\" \u2014 applied only to a hypothetical chat feature. It never flags that heavy/p99 users, rather than the average, drive the cost risk in the current design."
+    },
+    {
+      "text": "Recommends server-side rate limiting or usage caps on the paid-API endpoint to protect margin",
+      "passed": true,
+      "evidence": "\"Supabase edge function on a cron, key in the environment... Also put a hard per-user daily cap in the function so a bug can't loop.\" plus \"Meter it (e.g. 20 coach messages a month) from day one\"."
+    },
+    {
+      "text": "Recommends caching or storing generated content so it is not regenerated on every app open",
+      "passed": false,
+      "evidence": "No caching or store-and-serve recommendation appears anywhere. Generation is described as a cron job in an edge function, but the response never says the generated nudge should be persisted and re-served rather than regenerated on app open, and prompt caching is not mentioned either."
+    },
+    {
+      "text": "Places the paywall after the user has completed the core loop at least once, rather than at onboarding",
+      "passed": false,
+      "evidence": "The primary recommendation is the opposite: \"**Onboarding paywall, after the setup flow, before the home screen.** Let them pick their habits and set their goals first... Then show the paywall.\" A later second trigger at day 3-4 exists, but the first and primary placement precedes any completed core loop."
+    },
+    {
+      "text": "Recommends RevenueCat (or an equivalent abstraction) instead of hand-rolling StoreKit and Play Billing",
+      "passed": true,
+      "evidence": "\"use RevenueCat rather than wiring StoreKit and Play Billing yourself \u2014 free under $2.5k monthly tracked revenue, saves you weeks\""
+    },
+    {
+      "text": "States that entitlement/subscription checks must be enforced server-side, not only in the client UI",
+      "passed": false,
+      "evidence": "Server-side advice is limited to key handling and generation: \"**Generate nudges server-side.** Supabase edge function on a cron, key in the environment, never in the client bundle.\" There is no statement that subscription/entitlement status must be verified server-side before serving paid features; the client-side-check failure mode is never raised."
+    },
+    {
+      "text": "Directly addresses whether $4.99/mo is viable rather than deflecting the pricing question",
+      "passed": true,
+      "evidence": "\"## On the $4.99 \u2014 Cost isn't the reason to move off it. Churn is.\" and \"**You're probably underpriced, not overpriced.**... I'd test $7.99 or $8.99 monthly.\""
+    }
+  ],
+  "passed_count": 4,
+  "total_count": 8,
+  "pass_rate": 0.5,
+  "summary": {
+    "pass_rate": 0.5,
+    "passed": 4,
+    "failed": 4,
+    "total": 8
+  }
+}

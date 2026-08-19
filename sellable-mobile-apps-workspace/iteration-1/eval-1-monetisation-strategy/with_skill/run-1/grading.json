@@ -1,0 +1,56 @@
+{
+  "eval_id": 1,
+  "eval_name": "monetisation-strategy",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Performs explicit per-user margin arithmetic: requests per month multiplied by cost per request, compared against the subscription price",
+      "passed": true,
+      "evidence": "\"per_user_monthly_cost = requests_per_user_per_month \u00d7 cost_per_request\" then \"That's 30 calls/month\" with a per-model cost table ($0.09 / $0.27 / $0.45 per user/month) netted against \"$4.99 gross... \u2192 **~$4.24 net to you**\" giving \"**~$3.79 gross margin per subscriber**, about 89%\"."
+    },
+    {
+      "text": "Flags that the cost risk is driven by heavy/p99 users rather than the average user",
+      "passed": true,
+      "evidence": "\"**The number that actually kills margins is the p99, not the mean**\" \u2014 and explains why a once-daily server-scheduled nudge is structurally bounded: \"a power user *cannot* cost you 30x the average, because they can't trigger it.\""
+    },
+    {
+      "text": "Recommends server-side rate limiting or usage caps on the paid-API endpoint to protect margin",
+      "passed": true,
+      "evidence": "\"you need per-user server-side rate limits and a monthly generation cap\" and \"Rate-limit the endpoint server-side regardless. A leaked anon key plus an unprotected edge function is both a security finding and a margin leak.\""
+    },
+    {
+      "text": "Recommends caching or storing generated content so it is not regenerated on every app open",
+      "passed": true,
+      "evidence": "\"Cache the generated nudge in Supabase and serve it from there on every app open. Don't regenerate on each launch.\" (plus a separate prompt-caching recommendation for the shared system prefix)."
+    },
+    {
+      "text": "Places the paywall after the user has completed the core loop at least once, rather than at onboarding",
+      "passed": true,
+      "evidence": "\"**The rule: let the user complete the core loop at least once, for free.**\" with the ordering \"1. **Onboarding \u2014 no paywall.**... 2. **First habit logged \u2014 free.**... 3. **First real friction point \u2014 paywall here.**\""
+    },
+    {
+      "text": "Recommends RevenueCat (or an equivalent abstraction) instead of hand-rolling StoreKit and Play Billing",
+      "passed": true,
+      "evidence": "\"**Do not hand-roll StoreKit and Play Billing.**... Use **RevenueCat**: it's the standard abstraction over both stores... It's the default for Expo/React Native.\""
+    },
+    {
+      "text": "States that entitlement/subscription checks must be enforced server-side, not only in the client UI",
+      "passed": true,
+      "evidence": "\"**Entitlement checks server-side.**... A client-side `if (isPro)` is a suggestion. Your nightly nudge job must query verified subscription state in Supabase (RevenueCat webhooks \u2192 your DB) *before* it spends a token on that user.\""
+    },
+    {
+      "text": "Directly addresses whether $4.99/mo is viable rather than deflecting the pricing question",
+      "passed": true,
+      "evidence": "Opens with \"**$4.99 covers your API costs by roughly 10\u201350x.** The cost isn't your problem.\" and then answers the price question with a recommendation: \"**Consider $6.99\u2013$7.99/month.**... pick $6.99, ship, and revisit at 100 subscribers.\""
+    }
+  ],
+  "passed_count": 8,
+  "total_count": 8,
+  "pass_rate": 1.0,
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 8,
+    "failed": 0,
+    "total": 8
+  }
+}

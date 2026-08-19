@@ -1,0 +1,26 @@
+{
+  "skill_name": "sellable-mobile-apps",
+  "evals": [
+    {
+      "id": 0,
+      "name": "mvp-design-from-idea",
+      "prompt": "ok so i've had this idea rattling around for a while - a water intake tracker. nothing fancy. i drink way too little water and every app i've tried is either bloated with calorie counting or wants $9.99/mo for a glass icon. i can code a bit (js mostly) but i've never shipped a mobile app. where do i even start? i'd want it on both iphone and android eventually",
+      "expected_output": "Should run the 5-step MVP design framework (core function, core loop with sensory reward, accessory features, 5-7 screen cap, retention hook) BEFORE any code. Should name the architecture ladder and start at local-no-DB. Should recommend Expo/React Native for cross-platform. Should NOT jump straight into scaffolding code or a file tree.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "monetisation-strategy",
+      "prompt": "my habit tracker app is basically feature complete - expo/react native, supabase backend, and it has an AI coaching feature that sends users a personalised nudge once a day using claude. i'm trying to work out how to actually charge for this. i was thinking $4.99/mo but honestly i have no idea if that even covers the API costs. how should i think about pricing and where do i put the paywall?",
+      "expected_output": "Should perform the per-user margin arithmetic (requests/month x cost/request vs subscription price), flag that p99 power users not the mean are the risk, recommend rate-limiting and caching as margin protection, place the paywall AFTER first core-loop completion, and recommend RevenueCat over hand-rolled StoreKit/Play Billing. Should mention server-side entitlement checks.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "prelaunch-readiness",
+      "prompt": "finished my calorie tracker app (expo + supabase, uses claude vision for the food photos). tested it on my phone and it all works. what do i need to do before i can actually submit it to the app store? want to make sure i'm not missing anything dumb that gets it rejected",
+      "expected_output": "Should surface the blocking, easy-to-miss items: a hosted privacy policy AND support page, a working test sign-in account for the human Apple reviewer, 1024x1024 icon, screenshots for 6.5in iPhone and iPad, pricing schedule required even if free. Should recommend the two-pass security audit from a cleared context before submitting, and recommend TestFlight before public launch.",
+      "files": []
+    }
+  ]
+}

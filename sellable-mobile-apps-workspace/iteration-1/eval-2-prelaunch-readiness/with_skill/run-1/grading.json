@@ -1,0 +1,56 @@
+{
+  "eval_id": 2,
+  "eval_name": "prelaunch-readiness",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Names the requirement for a publicly hosted privacy policy AND a separate support page",
+      "passed": true,
+      "evidence": "\"**Privacy policy and support page, publicly hosted.** Both are required, both need to be real URLs, ideally on the same domain as your contact email.\""
+    },
+    {
+      "text": "Names the working test sign-in account required for the human App Store reviewer to get past the login screen",
+      "passed": true,
+      "evidence": "\"**A test account for the reviewer.**... If you don't give them working credentials in the \"Sign-In Required\" field in App Store Connect, they literally cannot see your app, and they reject it.\""
+    },
+    {
+      "text": "Specifies the 1024x1024 app icon requirement",
+      "passed": false,
+      "evidence": "The app icon spec is absent. The App Store Connect checklist covers \"screenshots at the sizes the console currently demands... promotional text, description, keywords, support URL, marketing URL, version `1.0`, copyright, the build tie-in, category, content rights, the gambling declaration\" \u2014 no icon dimensions anywhere in the response."
+    },
+    {
+      "text": "Names the screenshot requirements including the 6.5 inch iPhone display and iPad",
+      "passed": false,
+      "evidence": "Screenshots are mentioned only generically and the specifics are explicitly deferred: \"screenshots at the sizes the console currently demands (it'll tell you \u2014 and Claude can drive a browser through your app to generate them)\". Neither the 6.5 inch iPhone display nor iPad is named."
+    },
+    {
+      "text": "States that a pricing schedule must be selected even if the app is free",
+      "passed": true,
+      "evidence": "\"a **pricing schedule \u2014 required even if the app is free.**\""
+    },
+    {
+      "text": "Recommends a pre-launch security audit, ideally two passes run from a cleared/fresh context",
+      "passed": true,
+      "evidence": "\"## Run the full audit, twice, from a cleared context... run it from `/clear`, in a fresh session... Then fix them, `/clear` again, and **run the identical audit a second time.**\""
+    },
+    {
+      "text": "Recommends TestFlight beta distribution to real testers before public launch",
+      "passed": true,
+      "evidence": "\"**Don't skip TestFlight.**... Apple turns TestFlight builds around in about a day and you can invite a lot of people. Real users find things your own testing structurally cannot\""
+    },
+    {
+      "text": "Flags protecting the Claude API key and rate-limiting the vision endpoint, since an exposed or unbounded paid endpoint is both a security and cost exposure",
+      "passed": true,
+      "evidence": "\"the key lives in a **Supabase Edge Function**, the app calls the edge function, the edge function calls Anthropic\" plus \"**Rate-limit per user, server-side.** Client-side limits are a suggestion. The user who costs you money isn't the average one\" and \"An unauthenticated endpoint that calls a paid vision model is a free vision API for the whole internet.\""
+    }
+  ],
+  "passed_count": 6,
+  "total_count": 8,
+  "pass_rate": 0.75,
+  "summary": {
+    "pass_rate": 0.75,
+    "passed": 6,
+    "failed": 2,
+    "total": 8
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "eval_id": 1,
+  "eval_name": "monetisation-strategy",
+  "prompt": "my habit tracker app is basically feature complete - expo/react native, supabase backend, and it has an AI coaching feature that sends users a personalised nudge once a day using claude. i'm trying to work out how to actually charge for this. i was thinking $4.99/mo but honestly i have no idea if that even covers the API costs. how should i think about pricing and where do i put the paywall?",
+  "assertions": [
+    {
+      "id": "a1-margin-math",
+      "text": "Performs explicit per-user margin arithmetic: requests per month multiplied by cost per request, compared against the subscription price"
+    },
+    {
+      "id": "a1-p99-risk",
+      "text": "Flags that the cost risk is driven by heavy/p99 users rather than the average user"
+    },
+    {
+      "id": "a1-rate-limit",
+      "text": "Recommends server-side rate limiting or usage caps on the paid-API endpoint to protect margin"
+    },
+    {
+      "id": "a1-caching",
+      "text": "Recommends caching or storing generated content so it is not regenerated on every app open"
+    },
+    {
+      "id": "a1-paywall-placement",
+      "text": "Places the paywall after the user has completed the core loop at least once, rather than at onboarding"
+    },
+    {
+      "id": "a1-revenuecat",
+      "text": "Recommends RevenueCat (or an equivalent abstraction) instead of hand-rolling StoreKit and Play Billing"
+    },
+    {
+      "id": "a1-server-entitlement",
+      "text": "States that entitlement/subscription checks must be enforced server-side, not only in the client UI"
+    },
+    {
+      "id": "a1-answers-the-price",
+      "text": "Directly addresses whether $4.99/mo is viable rather than deflecting the pricing question"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "eval_id": 0,
+  "eval_name": "mvp-design-from-idea",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Walks the 5-step MVP design framework by name (core function, core loop, accessory features, surface area check, retention hook) before proposing any code",
+      "passed": false,
+      "evidence": "No framework is named or walked. The closest is a '## Scope for v1' feature list ('A number: how much you've drunk today.', 'An undo, because you'll misclick.'). None of the five slots appear by name or as distinct design steps, and the scope list comes after the scaffold commands."
+    },
+    {
+      "text": "States a concrete screen budget of roughly 5-7 screens as an anti-bloat constraint",
+      "passed": false,
+      "evidence": "No screen budget is given. The only screen-count remark points elsewhere: \"a water tracker might genuinely be one screen\", plus \"No history screen, no charts, no settings, no reminders yet.\" \u2014 scope trimming, but no stated 5-7 screen cap."
+    },
+    {
+      "text": "Specifies that the core loop's reward must be sensory (haptics, sound/chime, or animation) rather than merely informational",
+      "passed": false,
+      "evidence": "Only \"A goal, and something visual that fills up as you approach it.\" and later \"animations that feel considered\" as a Guideline 4.2 defence. It never states the reward must be sensory rather than informational, and haptics and sound are never mentioned."
+    },
+    {
+      "text": "Names the architecture ladder or otherwise explicitly starts local with no database, deferring cloud/DB to a later rung",
+      "passed": true,
+      "evidence": "\"you do not need a backend, a database server, or accounts. Use `@react-native-async-storage/async-storage`... If you later want a year of history and charts, move to `expo-sqlite`... Resisting the urge to add a backend is the single biggest reason your project will survive.\""
+    },
+    {
+      "text": "Recommends Expo / React Native as the route to both iOS and Android from one JS codebase",
+      "passed": true,
+      "evidence": "\"Since you write JS: **React Native with Expo**. Not a debate for your situation... one codebase gives you both iPhone and Android.\""
+    },
+    {
+      "text": "Does not dump a project scaffold, file tree, or implementation code before the MVP design is settled",
+      "passed": false,
+      "evidence": "A scaffold command block appears before any design work: \"npx create-expo-app@latest water / cd water / npx expo start\", reinforced by \"Tonight: `create-expo-app`, get the default screen running on your phone via Expo Go.\" Design is never settled first \u2014 there is no MVP design step at all."
+    },
+    {
+      "text": "When proposing a retention mechanic, is candid that engineered incompletion is a manipulation pattern rather than presenting it as neutral craft",
+      "passed": false,
+      "evidence": "No retention mechanic is proposed; notifications appear only as a technical friction point (\"`expo-notifications` handles local scheduled reminders\") and widgets only as anti-rejection polish. Engineered incompletion and its manipulative character are never raised, so there is nothing candid to credit."
+    }
+  ],
+  "passed_count": 2,
+  "total_count": 7,
+  "pass_rate": 0.286,
+  "summary": {
+    "pass_rate": 0.2857,
+    "passed": 2,
+    "failed": 5,
+    "total": 7
+  }
+}

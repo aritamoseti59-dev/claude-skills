@@ -1,0 +1,35 @@
+{
+  "eval_id": 0,
+  "eval_name": "mvp-design-from-idea",
+  "prompt": "ok so i've had this idea rattling around for a while - a water intake tracker. nothing fancy. i drink way too little water and every app i've tried is either bloated with calorie counting or wants $9.99/mo for a glass icon. i can code a bit (js mostly) but i've never shipped a mobile app. where do i even start? i'd want it on both iphone and android eventually",
+  "assertions": [
+    {
+      "id": "a0-framework",
+      "text": "Walks the 5-step MVP design framework by name (core function, core loop, accessory features, surface area check, retention hook) before proposing any code"
+    },
+    {
+      "id": "a0-screen-cap",
+      "text": "States a concrete screen budget of roughly 5-7 screens as an anti-bloat constraint"
+    },
+    {
+      "id": "a0-sensory-reward",
+      "text": "Specifies that the core loop's reward must be sensory (haptics, sound/chime, or animation) rather than merely informational"
+    },
+    {
+      "id": "a0-ladder-local-first",
+      "text": "Names the architecture ladder or otherwise explicitly starts local with no database, deferring cloud/DB to a later rung"
+    },
+    {
+      "id": "a0-expo-crossplatform",
+      "text": "Recommends Expo / React Native as the route to both iOS and Android from one JS codebase"
+    },
+    {
+      "id": "a0-design-before-code",
+      "text": "Does not dump a project scaffold, file tree, or implementation code before the MVP design is settled"
+    },
+    {
+      "id": "a0-retention-honesty",
+      "text": "When proposing a retention mechanic, is candid that engineered incompletion is a manipulation pattern rather than presenting it as neutral craft"
+    }
+  ]
+}

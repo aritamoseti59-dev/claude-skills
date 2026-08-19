@@ -1,0 +1,51 @@
+{
+  "eval_id": 0,
+  "eval_name": "mvp-design-from-idea",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Walks the 5-step MVP design framework by name (core function, core loop, accessory features, surface area check, retention hook) before proposing any code",
+      "passed": true,
+      "evidence": "All five slots are named and filled in order under 'Decision 2: design the MVP before building it': '**1. Core function.**', '**2. Core loop.**', '**3. Accessory features.**', '**4. Surface area check.**', '**5. Retention hook.**' \u2014 and this precedes any build instruction ('But before we write a line of code, I want to push back on \"where do I start\"')."
+    },
+    {
+      "text": "States a concrete screen budget of roughly 5-7 screens as an anti-bloat constraint",
+      "passed": true,
+      "evidence": "\"Cap it at 5-7 screens, and honestly a water tracker should be 3-4: home/log, history, settings, onboarding.\" framed as \"Complexity is the default failure here, not a risk.\""
+    },
+    {
+      "text": "Specifies that the core loop's reward must be sensory (haptics, sound/chime, or animation) rather than merely informational",
+      "passed": true,
+      "evidence": "\"The reward has to be **sensory, not informational.** A number going from 3 to 4 is informational and forgettable. What you want: the container visibly fills, a haptic thump, a soft water sound\""
+    },
+    {
+      "text": "Names the architecture ladder or otherwise explicitly starts local with no database, deferring cloud/DB to a later rung",
+      "passed": true,
+      "evidence": "\"Think of the architecture as a ladder, where each rung adds exactly one capability: 1. Local only, no API, no database\" and \"**rung 1 is a shippable product.**... Adding a database before the design has settled is the single most expensive mistake in this whole process.\""
+    },
+    {
+      "text": "Recommends Expo / React Native as the route to both iOS and Android from one JS codebase",
+      "passed": true,
+      "evidence": "\"Expo + React Native gets you iPhone and Android from one JavaScript codebase, and it runs on your actual phone over a QR code while you're editing.\""
+    },
+    {
+      "text": "Does not dump a project scaffold, file tree, or implementation code before the MVP design is settled",
+      "passed": true,
+      "evidence": "No code blocks, file trees or scaffold commands appear anywhere in the response; the build is explicitly deferred pending two answers: \"If you answer those two, I'll write the full MVP spec with all five slots filled, and we can hand it straight to a build.\""
+    },
+    {
+      "text": "When proposing a retention mechanic, is candid that engineered incompletion is a manipulation pattern rather than presenting it as neutral craft",
+      "passed": true,
+      "evidence": "\"I'll be straight with you on that last one: engineered incompletion is a manipulation technique. Ordinary, everywhere, and still manipulation.\" followed by opt-in alternatives and \"Your product, your call\"."
+    }
+  ],
+  "passed_count": 7,
+  "total_count": 7,
+  "pass_rate": 1.0,
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

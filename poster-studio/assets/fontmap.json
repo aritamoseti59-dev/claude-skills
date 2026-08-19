@@ -1,0 +1,236 @@
+{
+  "premium": [
+    {
+      "family": "Bodoni MT",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bodoni MT",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bodoni MT Black",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bodoni MT Condensed",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bodoni MT",
+      "weight": "normal",
+      "stretch": "condensed"
+    },
+    {
+      "family": "Baskerville Old Face",
+      "weight": "normal",
+      "stretch": "normal"
+    }
+  ],
+  "hype": [
+    {
+      "family": "Haettenschweiler",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Impact",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bernard MT Condensed",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Arial Narrow",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Franklin Gothic Heavy",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Gill Sans MT",
+      "weight": "bold",
+      "stretch": "condensed"
+    },
+    {
+      "family": "Tw Cen MT Condensed",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Rockwell Condensed",
+      "weight": "bold",
+      "stretch": "normal"
+    }
+  ],
+  "funk": [
+    {
+      "family": "Cooper Black",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Bauhaus 93",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Broadway",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Showcard Gothic",
+      "weight": "normal",
+      "stretch": "normal"
+    }
+  ],
+  "blunt": [
+    {
+      "family": "Berlin Sans FB",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Franklin Gothic Heavy",
+      "weight": "normal",
+      "stretch": "normal"
+    }
+  ],
+  "tech": [
+    {
+      "family": "Bahnschrift",
+      "weight": "600",
+      "stretch": "condensed"
+    },
+    {
+      "family": "Bahnschrift",
+      "weight": "bold",
+      "stretch": "condensed"
+    },
+    {
+      "family": "Bahnschrift Condensed",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Agency FB",
+      "weight": "bold",
+      "stretch": "normal"
+    }
+  ],
+  "script": [
+    {
+      "family": "Brush Script MT",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Freestyle Script",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Segoe Script",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Palace Script MT",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "French Script MT",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Edwardian Script ITC",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Monotype Corsiva",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Pristina",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Mistral",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Kunstler Script",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Vladimir Script",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Lucida Handwriting",
+      "weight": "normal",
+      "stretch": "normal"
+    }
+  ],
+  "utility": [
+    {
+      "family": "Franklin Gothic Heavy",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Franklin Gothic Medium",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Arial",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Arial Black",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Segoe UI",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Segoe UI Black",
+      "weight": "normal",
+      "stretch": "normal"
+    },
+    {
+      "family": "Tahoma",
+      "weight": "bold",
+      "stretch": "normal"
+    },
+    {
+      "family": "Verdana",
+      "weight": "bold",
+      "stretch": "normal"
+    }
+  ]
+}
