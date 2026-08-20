@@ -137,10 +137,16 @@ Options: `--width` / `--height` for other sizes, `--scale 2` for print,
 
 Exit 2 exists because the system font list and the browser's font namespace are
 different namespaces, and a face can enumerate as installed while resolving to
-Times. `references/fonts.md` explains it. The "roughly a fifth fail" rate was
-measured on Windows/DirectWrite; the mechanism holds identically on
-macOS/CoreText, but the rate here is unmeasured — and the verified font map in
-`references/fonts.md` is Windows-only. Read its warning before composing.
+Times. `references/fonts.md` explains it and carries a separately measured map
+per platform — use the macOS one on this machine. On macOS/CoreText, 61 of 65
+probed specs resolved (measured 2026-08-20); on Windows/DirectWrite roughly a
+fifth of plausible names failed.
+
+**Exit 0 is not the whole story.** A spec can resolve while silently ignoring
+the weight or stretch you asked for — `Gill Sans` accepts
+`font-stretch:condensed` and renders unchanged. Those cases exit 0 and look
+finished. `references/fonts.md` lists the known ones under "Resolves, but not a
+distinct face"; check it before trusting a condensed or black cut.
 
 The renderer also warns on content overflow — a poster that scrolls has
 overflowed its canvas and the export is cropped.
@@ -240,6 +246,7 @@ palette and their display voice rather than importing The Echo's.
   trap.
 - `references/assets.md` — sourcing, background removal, the likeness rule.
 - `assets/poster.html` — the template. Renders standalone.
-- `assets/fontmap.json` — machine-verified resolving font specs.
+- `assets/fontmap.darwin.json` / `assets/fontmap.win32.json` — machine-verified
+  resolving font specs, per platform.
 - `scripts/render.py` — HTML → exact-pixel image, with verification.
 - `scripts/fontcheck.py` — rebuild the font map on a different machine.

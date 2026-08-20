@@ -1,0 +1,579 @@
+{
+  "platform": "darwin",
+  "roles": {
+    "premium": [
+      {
+        "family": "Didot",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1512.1,
+          1512.1,
+          1512.1
+        ]
+      },
+      {
+        "family": "Didot",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1546.8,
+          1546.8,
+          1546.8
+        ]
+      },
+      {
+        "family": "Bodoni 72",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1297.4,
+          1297.4,
+          1297.4
+        ]
+      },
+      {
+        "family": "Bodoni 72",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1367.7,
+          1367.7,
+          1367.7
+        ]
+      },
+      {
+        "family": "Bodoni 72 Oldstyle",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1266.8,
+          1266.8,
+          1266.8
+        ]
+      },
+      {
+        "family": "Bodoni 72 Smallcaps",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1248.0,
+          1248.0,
+          1248.0
+        ]
+      },
+      {
+        "family": "Baskerville",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1416.1,
+          1416.1,
+          1416.1
+        ]
+      },
+      {
+        "family": "Baskerville",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1527.8,
+          1527.8,
+          1527.8
+        ]
+      },
+      {
+        "family": "Hoefler Text",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1499.2,
+          1499.2,
+          1499.2
+        ]
+      },
+      {
+        "family": "Hoefler Text",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1678.2,
+          1678.2,
+          1678.2
+        ]
+      },
+      {
+        "family": "Georgia",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1678.5,
+          1678.5,
+          1678.5
+        ]
+      },
+      {
+        "family": "Palatino",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1524.0,
+          1524.0,
+          1524.0
+        ]
+      },
+      {
+        "family": "Charter",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1455.0,
+          1455.0,
+          1455.0
+        ]
+      }
+    ],
+    "hype": [
+      {
+        "family": "Impact",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1198.7,
+          1198.7,
+          1198.7
+        ]
+      },
+      {
+        "family": "Arial Narrow",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1193.9,
+          1193.9,
+          1193.9
+        ]
+      },
+      {
+        "family": "Avenir Next Condensed",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1251.2,
+          1251.2,
+          1251.2
+        ]
+      },
+      {
+        "family": "Avenir Next Condensed",
+        "weight": "800",
+        "stretch": "normal",
+        "widths": [
+          1322.8,
+          1322.8,
+          1322.8
+        ]
+      },
+      {
+        "family": "DIN Condensed",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          922.0,
+          922.0,
+          922.0
+        ]
+      },
+      {
+        "family": "Helvetica Neue",
+        "weight": "bold",
+        "stretch": "condensed",
+        "widths": [
+          1200.4,
+          1200.4,
+          1200.4
+        ]
+      },
+      {
+        "family": "Futura",
+        "weight": "normal",
+        "stretch": "condensed",
+        "widths": [
+          944.1,
+          944.1,
+          944.1
+        ]
+      },
+      {
+        "family": "Futura",
+        "weight": "bold",
+        "stretch": "condensed",
+        "widths": [
+          1335.8,
+          1335.8,
+          1335.8
+        ]
+      },
+      {
+        "family": "Phosphate",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1287.1,
+          1287.1,
+          1287.1
+        ]
+      }
+    ],
+    "funk": [
+      {
+        "family": "SignPainter",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          942.3,
+          942.3,
+          942.3
+        ]
+      },
+      {
+        "family": "Marker Felt",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1416.7,
+          1416.7,
+          1416.7
+        ]
+      },
+      {
+        "family": "Chalkduster",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1616.6,
+          1616.6,
+          1616.6
+        ]
+      },
+      {
+        "family": "Bradley Hand",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1464.9,
+          1464.9,
+          1464.9
+        ]
+      },
+      {
+        "family": "Noteworthy",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1428.7,
+          1428.7,
+          1428.7
+        ]
+      },
+      {
+        "family": "Trattatello",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1254.8,
+          1254.8,
+          1254.8
+        ]
+      },
+      {
+        "family": "Luminari",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1532.9,
+          1532.9,
+          1532.9
+        ]
+      }
+    ],
+    "blunt": [
+      {
+        "family": "Futura",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1651.5,
+          1651.5,
+          1651.5
+        ]
+      },
+      {
+        "family": "Avenir Next",
+        "weight": "800",
+        "stretch": "normal",
+        "widths": [
+          1635.3,
+          1635.3,
+          1635.3
+        ]
+      },
+      {
+        "family": "Avenir Next",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1549.4,
+          1549.4,
+          1549.4
+        ]
+      },
+      {
+        "family": "Arial Black",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1631.9,
+          1631.9,
+          1631.9
+        ]
+      },
+      {
+        "family": "Gill Sans",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1635.8,
+          1635.8,
+          1635.8
+        ]
+      },
+      {
+        "family": "Optima",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1432.2,
+          1432.2,
+          1432.2
+        ]
+      },
+      {
+        "family": "Helvetica Neue",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1475.2,
+          1475.2,
+          1475.2
+        ]
+      }
+    ],
+    "tech": [
+      {
+        "family": "DIN Alternate",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1291.6,
+          1291.6,
+          1291.6
+        ]
+      },
+      {
+        "family": "DIN Condensed",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          922.0,
+          922.0,
+          922.0
+        ]
+      },
+      {
+        "family": "Menlo",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1257.1,
+          1257.1,
+          1257.1
+        ]
+      },
+      {
+        "family": "Courier New",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1253.0,
+          1253.0,
+          1253.0
+        ]
+      },
+      {
+        "family": "Silom",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1578.1,
+          1578.1,
+          1578.1
+        ]
+      },
+      {
+        "family": "Krungthep",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1577.9,
+          1577.9,
+          1577.9
+        ]
+      }
+    ],
+    "script": [
+      {
+        "family": "Snell Roundhand",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1474.6,
+          1474.6,
+          1474.6
+        ]
+      },
+      {
+        "family": "Snell Roundhand",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1543.8,
+          1543.8,
+          1543.8
+        ]
+      },
+      {
+        "family": "Zapfino",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          2540.0,
+          2540.0,
+          2540.0
+        ]
+      },
+      {
+        "family": "Apple Chancery",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1466.8,
+          1466.8,
+          1466.8
+        ]
+      },
+      {
+        "family": "Savoye LET",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1054.1,
+          1054.1,
+          1054.1
+        ]
+      },
+      {
+        "family": "Brush Script MT",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1173.7,
+          1173.7,
+          1173.7
+        ]
+      },
+      {
+        "family": "Bradley Hand",
+        "weight": "normal",
+        "stretch": "normal",
+        "widths": [
+          1464.9,
+          1464.9,
+          1464.9
+        ]
+      }
+    ],
+    "utility": [
+      {
+        "family": "Helvetica Neue",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1475.2,
+          1475.2,
+          1475.2
+        ]
+      },
+      {
+        "family": "Helvetica",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1456.0,
+          1456.0,
+          1456.0
+        ]
+      },
+      {
+        "family": "Arial",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1456.0,
+          1456.0,
+          1456.0
+        ]
+      },
+      {
+        "family": "Avenir Next",
+        "weight": "600",
+        "stretch": "normal",
+        "widths": [
+          1496.7,
+          1496.7,
+          1496.7
+        ]
+      },
+      {
+        "family": "Verdana",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1697.8,
+          1697.8,
+          1697.8
+        ]
+      },
+      {
+        "family": "Tahoma",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1543.3,
+          1543.3,
+          1543.3
+        ]
+      },
+      {
+        "family": "Trebuchet MS",
+        "weight": "bold",
+        "stretch": "normal",
+        "widths": [
+          1367.0,
+          1367.0,
+          1367.0
+        ]
+      }
+    ]
+  }
+}
