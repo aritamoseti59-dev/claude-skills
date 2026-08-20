@@ -135,10 +135,12 @@ Options: `--width` / `--height` for other sizes, `--scale 2` for print,
   typeface and still looks finished. Fix the font spec and render again; do not
   ship a `2`.
 
-Exit 2 exists because the Windows font list and the browser's font namespace
-are different namespaces, and a face can enumerate as installed while resolving
-to Times. `references/fonts.md` explains it. Roughly a fifth of plausible font
-names on this machine fail this way.
+Exit 2 exists because the system font list and the browser's font namespace are
+different namespaces, and a face can enumerate as installed while resolving to
+Times. `references/fonts.md` explains it. The "roughly a fifth fail" rate was
+measured on Windows/DirectWrite; the mechanism holds identically on
+macOS/CoreText, but the rate here is unmeasured — and the verified font map in
+`references/fonts.md` is Windows-only. Read its warning before composing.
 
 The renderer also warns on content overflow — a poster that scrolls has
 overflowed its canvas and the export is cropped.

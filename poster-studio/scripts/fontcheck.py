@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Probe which font specs actually resolve in Chromium on this machine.
 
-Why this exists: the Windows font enumeration (what PowerShell's
-InstalledFontCollection reports) is NOT the same namespace Chromium uses.
-Chromium resolves through DirectWrite, where style-linked faces live under a
-base typographic family plus weight/stretch rather than as standalone family
-names. So "Gill Sans Ultra Bold Condensed" appears installed, is requested in
+Why this exists: the OS font enumeration (PowerShell's InstalledFontCollection
+on Windows, Font Book / `system_profiler SPFontsDataType` on macOS) is NOT the
+same namespace Chromium uses. Chromium resolves through the platform text stack
+-- DirectWrite on Windows, CoreText on macOS -- where style-linked faces live
+under a base typographic family plus weight/stretch rather than as standalone
+family names. So "Gill Sans Ultra Bold Condensed" appears installed, is requested in
 CSS, and silently renders as Times — with no error anywhere.
 
 A poster that renders in the wrong face looks finished. That is the failure
@@ -16,9 +17,9 @@ and compare its width against `generic` alone, for three generics. If the width
 is identical in all three, the candidate never resolved.
 
 Usage:
-    python fontcheck.py                      # probe the built-in candidate list
-    python fontcheck.py --json map.json      # also write results to JSON
-    python fontcheck.py --add "Some Font"    # probe extra families
+    python3 fontcheck.py                      # probe the built-in candidate list
+    python3 fontcheck.py --json map.json      # also write results to JSON
+    python3 fontcheck.py --add "Some Font"    # probe extra families
 """
 
 import argparse

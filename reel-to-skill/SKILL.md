@@ -14,14 +14,21 @@ The audio is the narration; the screen is where the actual commands, settings
 and file paths live. Transcribing only the audio throws away the half that is
 usually harder to reconstruct — so this skill reads both, then reconciles.
 
-## Platform note (this machine is Windows)
+## Platform note (this machine is macOS, Apple Silicon)
 
-- `mlx-whisper` is Apple Silicon only. Use `openai-whisper` here.
-- openai-whisper takes **underscored** flags (`--output_format`, `--output_dir`);
-  mlx-whisper takes hyphenated ones. Do not mix them.
-- Use `python`, not `python3` — `python3` is the Microsoft Store stub.
-- `uvx` fetches yt-dlp and Whisper on demand; nothing needs installing by hand.
-  `yt-dlp` and `ffmpeg` also exist on PATH natively if uvx is ever unavailable.
+- `mlx-whisper` is Apple Silicon only, and this **is** an arm64 Mac — so it is
+  the right engine here and runs on the GPU. `openai-whisper` is the CPU
+  fallback, not the default.
+- The two take different flag styles. **mlx-whisper takes hyphenated** flags
+  (`--output-format`, `--output-dir`); **openai-whisper takes underscored**
+  ones (`--output_format`, `--output_dir`). Do not mix them.
+- Use `python3`.
+- Multi-line commands continue with `\`, not `^`.
+- **Nothing in this pipeline is installed yet.** `uvx`, `yt-dlp`, `ffmpeg` and
+  every Whisper build are all absent from PATH. Install `uv` first
+  (`python3 -m pip install uv`, since miniforge Python is already here) and
+  `uvx` will fetch the rest on demand. Verify before Step 1 — the old note
+  claimed these were already present, which was true of a different machine.
 
 ## Step 1: Fetch metadata (no download yet)
 
@@ -31,7 +38,7 @@ uvx yt-dlp --skip-download --dump-json "<REEL_URL>"
 
 From the JSON keep: `description` (this is the caption), `uploader`, `channel`,
 `like_count`, `comment_count`. Save them to a working folder at
-`C:\Users\roman\reel-to-skill-runs\<shortcode>\`.
+`~/reel-to-skill-runs/<shortcode>/`.
 
 The caption is not a footnote. Creators routinely put the steps in the caption
 that they gloss over in the audio, and on a music-only reel it is the entire
@@ -46,33 +53,40 @@ uvx yt-dlp -f "best[ext=mp4]/best" -o "<workdir>/reel.%(ext)s" "<REEL_URL>"
 ## Step 3: Transcribe the audio locally
 
 ```
-uvx --from openai-whisper whisper "<workdir>/reel.mp4" --model base ^
-  --output_format txt --output_dir "<workdir>" --language en
+uvx --from mlx-whisper mlx_whisper "<workdir>/reel.mp4" \
+  --model mlx-community/whisper-large-v3-turbo \
+  --output-format txt --output-dir "<workdir>" --language en
 ```
 
-Nothing leaves the machine. Models come from `openaipublic.azureedge.net`, not
-HuggingFace — the local hf_hub zero-byte stall does not apply to this path.
+Nothing leaves the machine — transcription is local on either engine. The model
+*source* differs though: `mlx-whisper` pulls weights from HuggingFace
+(`mlx-community/...`) on first run, while `openai-whisper` pulls from
+`openaipublic.azureedge.net`. The hf_hub zero-byte stall recorded in the old
+Windows notes was a property of that machine's network, not of this pipeline,
+and is untested here. If a first mlx run hangs at zero bytes, that is the
+symptom to recognise — fall back to `openai-whisper` rather than retrying.
 
-**Use `base`, not `turbo`, on this machine.** The source guide specifies
-`turbo`, which is correct on Apple Silicon where `mlx-whisper` runs on the GPU.
-This machine has no NVIDIA GPU, so torch falls back to CPU FP32 and the 809M
-`turbo` model becomes slow. Measured on a 29s sample:
+**Model choice on this machine is unmeasured — do not quote the numbers below
+as if they described it.** They were measured on the Windows box this skill was
+first written for, where torch fell back to CPU FP32 with no usable GPU:
 
-| Model | Wall time | Output |
-|-------|-----------|--------|
+| Model | Wall time (Windows, CPU FP32, 29s sample) | Output |
+|-------|-------------------------------------------|--------|
 | `turbo` | 228s | lowercase, no punctuation |
 | `base` | 79s | correct capitalisation and sentence breaks |
 
-`base` was both ~2.9x faster *and* better formatted, and readable prose is what
-Step 7 hands to skill-creator. Cost is dominated by a fixed per-invocation model
-load (~161s for `turbo`, ~64s for `base`) plus a per-audio-second rate, because
-`uvx` starts a fresh process each run. Projected for a 60s reel: ~5 min on
-`turbo`, ~1.5 min on `base`.
+That constraint does not exist here. On Apple Silicon `mlx-whisper` runs on the
+GPU, which is exactly the configuration the original source guide assumed when
+it specified `turbo`. So the guide's choice is most likely right on this
+machine, and the `base` workaround above is most likely obsolete.
 
-Escalate to `--model small` only if `base` visibly garbles domain terms, and to
-`turbo` only if `small` also fails — accepting the minutes. Do not reach for
-`faster-whisper`: it is installed here but has no cached models, so it would
-pull from HuggingFace, which stalls at zero bytes on this machine.
+**Most likely is not measured.** Benchmark once on a real clip before writing
+any timing claim into a spec or telling the user how long to wait, then replace
+this section with the measured numbers. Until that happens, quote no figures.
+
+Step back to `--model mlx-community/whisper-base-mlx` if `turbo` disappoints on
+speed or the clip is trivially short. Fall back to `openai-whisper` (underscored
+flags, `--model base`) only if mlx cannot fetch or run its weights at all.
 
 Drop `--language en` for a non-English reel, or set it to that language. Leaving
 it off entirely lets Whisper autodetect, which is usually right but occasionally
@@ -86,9 +100,14 @@ silent multi-minute wait is indistinguishable from a hang.
 The reel is still on disk at this point — this is the only chance to read it.
 
 ```
-python "C:\Users\roman\.claude\plugins\cache\claude-video\watch\0.2.0\skills\watch\scripts\watch.py" ^
-  "<workdir>\reel.mp4" --detail balanced --max-frames 20 --resolution 1024 --no-whisper
+python3 ~/.claude/plugins/cache/claude-video/watch/<version>/skills/watch/scripts/watch.py \
+  "<workdir>/reel.mp4" --detail balanced --max-frames 20 --resolution 1024 --no-whisper
 ```
+
+The `claude-video` plugin is **not installed on this machine** — `~/.claude/plugins`
+does not exist yet. Install it before relying on this step, and glob the real
+version directory rather than hardcoding one; the `0.2.0` in the original note
+was pinned to a different machine's install.
 
 - `--no-whisper` is mandatory: audio is already transcribed locally in Step 3,
   and this flag stops the clip being uploaded to a paid transcription API.
@@ -116,7 +135,7 @@ Two guards, in order:
 
 ## Step 6: Reconcile the two readers
 
-Write `<workdir>\SPEC.md` labelling every claim by where it came from:
+Write `<workdir>/SPEC.md` labelling every claim by where it came from:
 
 - **CONFIRMED** — said in the audio *and* visible on screen. Build on it.
 - **SINGLE SOURCE** — one channel only. Keep it, mark it, do not present it as
@@ -170,11 +189,11 @@ built from a tutorial and never executed is a summary of a video, not a tool.
 Built from "The Reel to Skill Engine" by Jens Heitmann (@jens.heitmann),
 extracted 2026-08-16. Deviations from the source, all deliberate:
 
-- **Windows.** `openai-whisper` in place of `mlx-whisper` (Apple Silicon only),
-  with underscored flags.
-- **`base` in place of `turbo`.** Benchmarked on this machine, not assumed —
-  see the table in Step 3. The guide's model choice and its "runs take seconds"
-  claim both assume a GPU this machine does not have.
+- **Platform.** First adapted for Windows: `openai-whisper` in place of
+  `mlx-whisper`, underscored flags, and `base` in place of `turbo` — both
+  benchmarked on that machine, which had no usable GPU. Re-adapted for macOS on
+  Apple Silicon, 2026-08-20: `mlx-whisper` and `turbo` revert to the guide's
+  original choices, but are **unbenchmarked here**. See Step 3.
 - **Step 4 frames pass and Step 6 reconciliation** are additions. The source
   transcribes audio only and deletes the video, which discards everything shown
   on screen — usually where a workflow reel's actual commands live.

@@ -2,11 +2,13 @@
 
 ## The trap
 
-The Windows font list and the browser's font namespace are **not the same thing**.
-A face can appear in `InstalledFontCollection`, be requested by that exact name in
-CSS, and silently render as Times. Chromium resolves through DirectWrite, where
-style-linked faces live under a base typographic family plus weight/stretch rather
-than as standalone family names.
+The system font list and the browser's font namespace are **not the same thing**.
+A face can appear in the OS font enumeration, be requested by that exact name in
+CSS, and silently render as Times. Chromium resolves through the platform text
+stack — DirectWrite on Windows, **CoreText on macOS** — where style-linked faces
+live under a base typographic family plus weight/stretch rather than as
+standalone family names. The trap is identical on both; only the resolver
+differs.
 
 `document.fonts.check()` cannot detect this. It answers *"can this text be
 painted"*, which is true whenever any fallback exists — so a poster rendering
@@ -20,8 +22,20 @@ if any face fell back. Treat exit 2 as a failed render, not a warning.
 
 ## Verified map
 
-Measured on this machine, 2026-08-17. Each entry below resolved; entries under
-"Does not resolve" enumerate as installed but fall back.
+> **⚠ This map was measured on a Windows machine and is not valid on the
+> current macOS machine.** Every display face below — Bodoni MT, Bodoni MT
+> Condensed, Haettenschweiler, Impact, Cooper Black, Bauhaus 93, Broadway,
+> Showcard Gothic, Baskerville Old Face, Bernard MT Condensed, Arial Narrow,
+> Didot, Playfair Display — is a Windows/Office font, and **none of them are
+> installed here** (checked 2026-08-20). Composing against this map on macOS
+> yields a poster set entirely in fallback, which `render.py` catches as exit 2.
+> Regenerate before using poster-studio on this machine:
+> `python3 scripts/fontcheck.py --json map.json` (requires Playwright), then
+> replace the tables below with the result. Keep this Windows map only as the
+> record for that machine.
+
+Measured on the Windows machine, 2026-08-17. Each entry below resolved there;
+entries under "Does not resolve" enumerate as installed but fall back.
 
 ### T1 display — varies per event, one voice per poster
 

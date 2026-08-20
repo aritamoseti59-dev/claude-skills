@@ -14,20 +14,23 @@ timestamped transcript inside your own context. Gemini reads the video natively
 on Google's side and returns a written spec. They are wrong in different ways,
 and the disagreement is the useful part.
 
-## Platform note (this machine is Windows)
+## Platform note (this machine is macOS, Apple Silicon)
 
-- Use `python`, not `python3`. On Windows `python3` is the Microsoft Store stub
-  and will not run these scripts.
+- Use `python3`. Both `python` and `python3` resolve to the same miniforge
+  Python 3.13 here, so either runs, but `python3` stays correct if the
+  miniforge shim ever leaves PATH.
 - The Gemini pass script lives beside this file at
-  `%USERPROFILE%\.claude\skills\youtube-to-agent\scripts\gemini_review.py`.
-  Call it by that absolute path so it works from any working directory.
-- The key lives in the user environment variable `GEMINI_API_KEY`. If a run
-  reports no key, it was set after this shell started — read it with
-  `[Environment]::GetEnvironmentVariable('GEMINI_API_KEY','User')` and pass it
+  `~/.claude/skills/youtube-to-agent/scripts/gemini_review.py`. Call it by
+  that absolute path so it works from any working directory.
+- Multi-line commands continue with `\`, not `^`.
+- The key lives in the environment variable `GEMINI_API_KEY`. If a run reports
+  no key, it was exported into a shell profile after this shell started — read
+  it back with `grep GEMINI_API_KEY ~/.zshrc ~/.zprofile ~/.zshenv` and pass it
   through `--key` rather than telling the user to set it again.
-- `ffmpeg` is installed via winget at
-  `%LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-9.0-full_build\bin`.
-  Prepend that to `$env:PATH` for any session that shells out to /watch.
+- **Dependencies are not installed on this machine yet.** The Gemini pass needs
+  `google-genai` (`python3 -m pip install google-genai`); /watch needs `ffmpeg`,
+  which needs Homebrew first. Check both before Step 1 rather than discovering
+  it at Step 3.
 
 ## Step 1: Scope before spending anything
 
@@ -99,7 +102,8 @@ BEFORE looking at Gemini's answer, or you will anchor to it.
 
 ## Step 3: The Gemini pass
 
-    python "%USERPROFILE%\.claude\skills\youtube-to-agent\scripts\gemini_review.py" "<url>" --samples 2 --start <seconds> --end <seconds> ^
+    python3 ~/.claude/skills/youtube-to-agent/scripts/gemini_review.py "<url>" \
+      --samples 2 --start <seconds> --end <seconds> \
       --focus "<what the user asked for>" > notes/gemini-pass.md
 
 Two samples on purpose. A claim in both samples is worth something. A claim in

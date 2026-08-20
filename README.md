@@ -34,7 +34,7 @@ skills folder.
 ## Install
 
 Copy (or clone and symlink) the skill directory you want into your Claude
-Code skills folder, e.g. on Windows:
+Code skills folder:
 
 ```
 cp -r execute-external-setup "$HOME/.claude/skills/"

@@ -8,9 +8,12 @@
 #   speak.sh "Save it" --voice Daniel --rate 200 --out /tmp/out.aiff
 #
 # Voice note: the Windows default was "Microsoft Hazel Desktop" (en-GB
-# female); "Serena" is the closest stock macOS equivalent. `say -v '?'`
-# lists what is actually installed — most voices need a one-time download
-# under System Settings > Accessibility > Spoken Content > System Voice.
+# female). The closest macOS equivalents, "Serena" and "Kate", are NOT
+# installed on this machine and need a one-time download under System
+# Settings > Accessibility > Spoken Content > System Voice. Until then the
+# default below is "Daniel" — the only en-GB voice actually present. For a
+# female register instead of the accent, pass --voice Moira (en-IE) or
+# --voice Samantha (en-US). `say -v '?'` lists what is really installed.
 #
 # Rate note: SAPI took -10..10; `say -r` takes words per minute (default
 # ~175). They are not the same scale, so the flag is WPM here.
@@ -19,7 +22,7 @@ set -euo pipefail
 text="${1:?usage: speak.sh <text> [--voice NAME] [--rate WPM] [--out FILE]}"
 shift
 
-voice="Serena"
+voice="Daniel"
 rate=175
 out=""
 

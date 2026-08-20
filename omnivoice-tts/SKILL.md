@@ -1,11 +1,14 @@
 ---
 name: omnivoice-tts
-description: Text-to-speech on this machine. Instant Windows system voices for anything spoken live, and the local OmniVoice model for voice-cloned, voice-designed, or non-English audio assets. Use when asked to speak, say something aloud, read text out, narrate, generate a voiceover or audio notification, clone a voice, or produce speech in another language. Routes by latency: OmniVoice runs ~150x slower than real-time on this CPU and must never be used for live speech.
+description: Text-to-speech on this machine. Instant macOS system voices for anything spoken live, and the local OmniVoice model for voice-cloned, voice-designed, or non-English audio assets. Use when asked to speak, say something aloud, read text out, narrate, generate a voiceover or audio notification, clone a voice, or produce speech in another language. Routes by latency: OmniVoice is orders of magnitude slower than real-time and must never be used for live speech.
 ---
 
 # Text-to-speech on this machine
 
-Internal skill — machine-specific paths and measured timings for this laptop.
+Internal skill — machine-specific paths and timings for this laptop
+(macOS 26, Apple Silicon). The `.ps1` scripts alongside each `.sh` are the
+Windows counterparts, kept for the other machine; on this one always use the
+`.sh` scripts.
 
 ## Pick the engine first
 
@@ -15,53 +18,75 @@ sentence.
 
 | Need | Engine | Latency |
 |---|---|---|
-| Speak something now; notifications; progress; confirmations | `scripts/speak.ps1` (Windows SAPI) | instant |
-| Replay a phrase already rendered by OmniVoice | `scripts/play.ps1` | instant |
-| Voice cloning, voice design, non-English, best quality | `scripts/render.ps1` (OmniVoice) | ~2.5 min compute per second of audio |
+| Speak something now; notifications; progress; confirmations | `scripts/speak.sh` (macOS `say`) | instant |
+| Replay a phrase already rendered by OmniVoice | `scripts/play.sh` | instant |
+| Voice cloning, voice design, non-English, best quality | `scripts/render.sh` (OmniVoice) | minutes of compute per second of audio |
 
 **Rule: nothing the user is waiting on may call OmniVoice.** If speech is
-needed inside a live interaction, use `speak.ps1`. OmniVoice is only for
+needed inside a live interaction, use `speak.sh`. OmniVoice is only for
 assets generated ahead of time and reused.
 
 ## Instant speech
 
-```powershell
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/speak.ps1 "Your text here"
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/speak.ps1 -Text "Slower and male" -Voice "Microsoft David Desktop" -Rate -2
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/speak.ps1 -Text "Save it" -Out "C:\path\out.wav"
+```bash
+<skill>/scripts/speak.sh "Your text here"
+<skill>/scripts/speak.sh "Slower and American" --voice Samantha --rate 150
+<skill>/scripts/speak.sh "Save it" --out ~/Downloads/out.aiff
 ```
 
-Voices installed: `Microsoft Hazel Desktop` (en-GB female, default),
-`Microsoft David Desktop` (en-US male), `Microsoft Zira Desktop` (en-US
-female). An unknown `-Voice` warns and falls back rather than failing.
-`-Rate` is -10..10, `-Volume` is 0..100.
+`--rate` is **words per minute** (default 175), not the -10..10 SAPI scale the
+Windows script used. The two are not interchangeable — a `--rate 2` here is
+two words per minute, not slightly-fast.
+
+Voices actually installed on this machine (checked 2026-08-20): `Daniel`
+(en-GB male, the default), `Moira` (en-IE female), `Karen` (en-AU female),
+`Tessa` (en-ZA female), `Samantha` (en-US female), `Fred`/`Albert` (en-US
+male), plus the novelty set (`Zarvox`, `Bubbles`, `Whisper`, …).
+
+**There is no en-GB female voice installed.** The Windows default was
+`Microsoft Hazel Desktop` (en-GB female); its closest macOS equivalents,
+`Serena` and `Kate`, both need a one-time download under System Settings →
+Accessibility → Spoken Content → System Voice. Until then `Daniel` keeps the
+accent and `Moira` keeps the register — pick whichever matters more for the
+line. An unknown `--voice` warns and falls back to the system default rather
+than failing. `say -v '?'` lists what is really there.
+
+Output is AIFF, not WAV — that is what `say` writes natively.
 
 ## Play a cached clip
 
-```powershell
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/play.ps1 task_complete
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/play.ps1 -Name x -List     # list clip ids
+```bash
+<skill>/scripts/play.sh task_complete
+<skill>/scripts/play.sh --list      # list clip ids
 ```
 
-Cache lives at `C:\Users\roman\Downloads\OmniVoice\voice_cache`. Accepts a
-bare clip id or a full path to a WAV. Playback is free — only generation
-costs anything, which is the whole reason the cache exists.
+Cache defaults to `~/Downloads/OmniVoice/voice_cache`, overridable with
+`$OMNIVOICE_CACHE_DIR`. Accepts a bare clip id or a full path to a WAV.
+Playback is free — only generation costs anything, which is the whole reason
+the cache exists.
 
 ## Render assets with OmniVoice
 
-Always batch. The 3.1 GB model loads once per run (~25 s), so one run of ten
-clips beats ten runs of one.
+> **OmniVoice is not installed on this machine.** `render.sh` expects a venv at
+> `$OMNIVOICE_ROOT/.venv/bin/omnivoice-infer-batch` (default
+> `~/Downloads/OmniVoice`), and that path does not exist here — checked
+> 2026-08-20. The script exits 1 with `OmniVoice venv missing` rather than
+> failing obscurely. Install it, or point `$OMNIVOICE_ROOT` at an existing
+> install, before promising anyone a cloned voice.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/render.ps1 -TestList phrases.jsonl -NumStep 8 -EstimateOnly
-powershell -ExecutionPolicy Bypass -File <skill>/scripts/render.ps1 -TestList phrases.jsonl -NumStep 8
+Always batch. The 3.1 GB model loads once per run, so one run of ten clips
+beats ten runs of one.
+
+```bash
+<skill>/scripts/render.sh phrases.jsonl --num-step 8 --estimate-only
+<skill>/scripts/render.sh phrases.jsonl --num-step 8
 ```
 
 Manifest is JSONL, one clip per line. Only `id` and `text` are required:
 
 ```json
 {"id": "greeting", "text": "Good morning.", "language_id": "en"}
-{"id": "cloned",   "text": "In my own voice.", "ref_audio": "C:\\path\\me.wav", "ref_text": "exact transcript of me.wav"}
+{"id": "cloned",   "text": "In my own voice.", "ref_audio": "/Users/you/me.wav", "ref_text": "exact transcript of me.wav"}
 {"id": "designed", "text": "Calm and slow.", "instruct": "calm British narrator, low energy"}
 ```
 
@@ -69,22 +94,23 @@ Manifest is JSONL, one clip per line. Only `id` and `text` are required:
 designs one when no reference audio exists. Also accepted: `duration`,
 `speed`.
 
-Script guards, both verified: refuses jobs estimated over `-MaxMinutes`
-(default 15) unless `-Force`, and refuses to start when another render is
-running unless `-AllowConcurrent` — two models on 4 cores makes both crawl.
+Script guards: refuses jobs estimated over `--max-minutes` (default 15) unless
+`--force`, and refuses to start when another render is running unless
+`--allow-concurrent`.
 
-### Speed levers — measured, not assumed
+### Speed levers
 
 Defaults are `num_step=32`, `guidance_scale=2.0`, `t_shift=0.1`.
 
-**`num_step` does not reduce runtime on this machine.** Measured twice:
-`num_step=32` gave 148x real-time, `num_step=8` gave 159x — slightly slower,
-not 4x faster. Runtime is dominated by autoregressive token generation in the
-Qwen3 backbone, which `num_step` does not touch; it only controls iterative
-decoding of the audio codebooks. Lower it for quality experiments if you
-like, but do not expect it to buy time, and never promise a user it will.
+**`num_step` did not reduce runtime on the Windows machine.** Measured twice
+there: `num_step=32` gave 148x real-time, `num_step=8` gave 159x — slightly
+slower, not 4x faster. The cause is architectural rather than machine-specific:
+runtime is dominated by autoregressive token generation in the Qwen3 backbone,
+which `num_step` does not touch; it only controls iterative decoding of the
+audio codebooks. Expect that to hold here too, but do not promise a user it
+will until it is measured on this machine.
 
-Untested on this machine, so do not quote numbers for these:
+Untested anywhere, so do not quote numbers for these:
 
 - `--guidance_scale 1.0` removes the CFG pass. Plausibly helps, unverified,
   and costs prompt adherence.
@@ -95,41 +121,42 @@ If a job is too slow, the only reliable lever is **less text**.
 
 ## Before starting any render
 
-1. Run with `-EstimateOnly` first and state the estimate to the user.
+1. Run with `--estimate-only` first and state the estimate to the user.
 2. Over ~10 min, get explicit confirmation before starting — the cost is
    invisible up front; a paragraph looks small and renders for hours.
 3. Start it in the background, never foreground — these outlive tool
    timeouts and get orphaned.
-4. Poll progress by checking the output WAVs directly, not a directory
+4. Poll progress by stat-ing the output WAVs directly, not a directory
    listing (see gotchas).
 
 ## Measured facts and gotchas
 
-- **~150-160x slower than real-time**, regardless of `num_step`. Two measured
-  runs: 3.64 s of audio in 9 min 18 s (148x, `num_step=32`); 11.79 s of audio
-  in 31 min 38 s (159x, `num_step=8`). Budget ~3 min of compute per second of
-  speech.
-- **A finished WAV does not mean a finished job.** In batch mode all the
-  output files appeared roughly 3 minutes in, while the process ran another
-  ~28 minutes before exiting. Judge completion by process exit or the
-  script's own `Finished` line — never by the output files existing. Reporting
-  "done" off the file listing understated one run by 10x.
-- **`huggingface_hub` downloads are broken on this machine** — they hang at
-  zero bytes on HuggingFace's xet-bridge CDN, in both directions of
-  `HF_HUB_DISABLE_XET`. Never let anything auto-download from HF. Weights
-  are already local at `C:\Users\roman\Downloads\OmniVoice\model`; fetch new
-  ones with curl instead.
-- **PowerShell execution policy is Restricted** on every scope, so
-  `powershell -File script.ps1` fails with "running scripts is disabled on
-  this system". Always pass `-ExecutionPolicy Bypass`, as every example above
-  does. Note that an agent's own PowerShell session may run with `Process`
-  scope set to `Bypass`, which child processes inherit — so a script can work
-  when tested from there and still fail from a plain terminal. Verify from a
-  clean shell.
-- **ffmpeg is not installed**, so every run prints a pydub warning. Harmless
-  — output is WAV via soundfile. It only matters for mp3/m4a.
-- **Directory listings report stale sizes for files being written** on NTFS.
-  When checking render progress, stat the WAV directly; a recursive folder
-  total can sit frozen while the file is actively growing.
-- Renders survive session teardown as orphaned processes. Check with
-  `Get-Process omnivoice-infer-batch` before assuming nothing is running.
+- **The ~150-160x-slower-than-real-time figure is a Windows measurement, on
+  4 CPU cores.** Two runs there: 3.64 s of audio in 9 min 18 s (148x,
+  `num_step=32`); 11.79 s of audio in 31 min 38 s (159x, `num_step=8`).
+  `render.sh` carries that ratio as its estimator default
+  (`$OMNIVOICE_SEC_PER_SEC`, 175). Apple Silicon will almost certainly differ.
+  **Benchmark one short clip and reset `$OMNIVOICE_SEC_PER_SEC` before quoting
+  any estimate to the user on this machine.**
+- **A finished WAV does not mean a finished job.** In batch mode on the
+  Windows runs, all output files appeared roughly 3 minutes in while the
+  process ran another ~28 minutes before exiting. Judge completion by process
+  exit or the script's own `Finished` line — never by the output files
+  existing. Reporting "done" off the file listing understated one run by 10x.
+  This is a property of the batch writer, not of the OS.
+- **Check for orphans before assuming nothing is running:**
+  `pgrep -f omnivoice-infer-batch`. Renders survive session teardown.
+- **`huggingface_hub` downloads stalled at zero bytes on the Windows
+  machine**, in both directions of `HF_HUB_DISABLE_XET`. That was a property
+  of that machine's network and is **untested here**. If a fetch hangs at zero
+  bytes, recognise the symptom and pull with curl instead of retrying.
+- **Directory listings can report stale sizes for files being written.**
+  Observed on NTFS; the safe habit is platform-independent — `stat` the WAV
+  directly rather than reading a recursive folder total, which can sit frozen
+  while the file is actively growing.
+- **`ffmpeg` is not installed** (checked 2026-08-20), so OmniVoice runs print
+  a pydub warning. Harmless — output is WAV via soundfile. It only matters for
+  mp3/m4a.
+- The PowerShell execution-policy gotcha from the Windows notes does not apply
+  here. The macOS equivalent is the executable bit: if a script fails with
+  "permission denied", `chmod +x scripts/*.sh` (already done at install).
