@@ -9,6 +9,11 @@
   --H: 2000px;
   --safe: 6%;              /* nothing in zones 6-9 crosses this */
 
+  /* Type scale. 1 = the 1600x2000 master. The story cut is a rebuild at a
+     different aspect, not a crop, so every px type size below multiplies by
+     this rather than being restated. Change --k in one place, not 15. */
+  --k: 1;
+
   /* ---- colour tokens (see references/design-system.md Â§5) ---- */
   --ground:  #0C0C0E;
   --primary: #FFFFFF;
@@ -41,13 +46,13 @@
   --t1-family:   "Didot";                 /* Windows: "Bodoni MT Condensed" */
   --t1-weight:   400;
   --t1-stretch:  normal;
-  --t1-size:     190px;
+  --t1-size:     calc(190px * var(--k));
   --t1-leading:  0.86;
   --t1-tracking: -0.005em;
 
   /* ---- T2 script: connector only, never load-bearing information ---- */
   --t2-family: "Snell Roundhand";     /* Windows: "Freestyle Script" */
-  --t2-size:   88px;        /* keep cap height >= 42px or it degrades */
+  --t2-size:   calc(88px * var(--k));   /* keep cap height >= 42px or it degrades */
 
   /* ---- T3 utility: LOCKED. Same face on every poster, always. ---- */
   --t3-family: "Helvetica Neue";      /* Windows: "Segoe UI" */
@@ -57,7 +62,17 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
+/* html sizes to the viewport, NOT to --W/--H. A cut that overrides those
+   tokens does so on <body> (body.story), and custom properties cascade
+   downward only -- html would keep the master's 1600x2000 and render.py
+   would correctly report the canvas as overflowing. Keep html viewport-sized
+   so the overflow warning stays meaningful instead of always firing. */
+html {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--ground);
+}
+body {
   width: var(--W); height: var(--H);
   overflow: hidden;
   background: var(--ground);
@@ -121,6 +136,20 @@ html, body {
 }
 .spacer { flex: 1 1 auto; }
 
+/* ---- Story cut: 1080x1920, REBUILT not cropped ----------------------
+   design-system.md 1: zones 6-9 are too dense to survive a crop, so the
+   story carries zones 1-5 plus the venue lockup and drops 7/8/9 in the
+   markup. Everything here is the aspect rebuild: narrower canvas, type
+   rescaled by --k so proportions hold rather than being re-guessed. */
+body.story {
+  --W: 1080px;
+  --H: 1920px;
+  --k: .675;               /* 1080/1600 -- hold the master's proportions */
+}
+body.story .legal,
+body.story .reserve,
+body.story .social { display: none; }
+
 /* ---- Type-led cut: no talent photography ---------------------------
    Zone 4 carries the poster in the reference set, so the spacer above
    exists to let full-bleed bodies fill the middle. With no cutout, that
@@ -147,19 +176,19 @@ body.type-led .venue    { margin-top: auto; }
   align-self: center;
   background: var(--primary); color: #000;
   font-weight: var(--t3-bold);
-  font-size: 30px; letter-spacing: .10em;
-  padding: 11px 26px; border-radius: 6px;
+  font-size: calc(30px * var(--k)); letter-spacing: .10em;
+  padding: calc(11px * var(--k)) calc(26px * var(--k)); border-radius: 6px;
 }
 .date--special {                    /* specials alternate: red disc */
   background: var(--red); color: var(--primary);
   border-radius: 999px; padding: 26px 22px;
-  line-height: 1.05; text-align: center; font-size: 27px;
+  line-height: 1.05; text-align: center; font-size: calc(27px * var(--k));
 }
 
 /* ============ ZONE 2 â€” PRESENTER LINE ============ */
 .presents {
   align-self: center; margin-top: 34px;
-  font-size: 25px; font-weight: 400;
+  font-size: calc(25px * var(--k)); font-weight: 400;
   letter-spacing: .35em; text-transform: uppercase;
   opacity: .72;
 }
@@ -192,11 +221,11 @@ body.type-led .venue    { margin-top: auto; }
 .credits { text-align: center; }
 .featuring {
   font-family: var(--t2-family), cursive;
-  font-size: 70px; line-height: 1; margin-bottom: 10px;
+  font-size: calc(70px * var(--k)); line-height: 1; margin-bottom: 10px;
 }
 .roster {
   font-weight: var(--t3-black);
-  font-size: 46px; letter-spacing: .012em;
+  font-size: calc(46px * var(--k)); letter-spacing: .012em;
   line-height: 1.22; text-transform: uppercase;
 }
 /* The alternation rule, enforced by the template so it cannot be got wrong:
@@ -218,7 +247,7 @@ body.type-led .venue    { margin-top: auto; }
 
 .stars {
   text-align: center; margin: 26px 0;
-  font-size: 26px; letter-spacing: .5em; opacity: .6;
+  font-size: calc(26px * var(--k)); letter-spacing: .5em; opacity: .6;
 }
 
 /* ============ ZONE 6 â€” VENUE LOCKUP ============ */
@@ -229,22 +258,22 @@ body.type-led .venue    { margin-top: auto; }
 .venue .mark { width: 96px; height: 62px; flex: none; }
 .venue .bar { width: 2px; align-self: stretch; background: rgba(255,255,255,.42); }
 .venue .cell { text-align: center; }
-.venue .name { font-weight: var(--t3-black); font-size: 62px; line-height: 1.02; }
+.venue .name { font-weight: var(--t3-black); font-size: calc(62px * var(--k)); line-height: 1.02; }
 .venue .addr {
-  font-weight: var(--t3-bold); font-size: 27px;
+  font-weight: var(--t3-bold); font-size: calc(27px * var(--k));
   letter-spacing: .09em; color: var(--gold); margin-top: 4px;
 }
 .venue .aux-l {                   /* the sanctioned extra cell, e.g. dress code */
-  font-weight: var(--t3-bold); font-size: 20px;
+  font-weight: var(--t3-bold); font-size: calc(20px * var(--k));
   letter-spacing: .14em; opacity: .8;
 }
-.venue .aux-v { font-weight: var(--t3-black); font-size: 34px; line-height: 1.05; }
+.venue .aux-v { font-weight: var(--t3-black); font-size: calc(34px * var(--k)); line-height: 1.05; }
 
 /* ============ ZONE 8 â€” RESERVATION / DOORS / PRICE ============ */
 .reserve {
   display: flex; align-items: center; gap: 22px;
   margin-top: 24px;
-  font-weight: var(--t3-bold); font-size: 27px; letter-spacing: .06em;
+  font-weight: var(--t3-bold); font-size: calc(27px * var(--k)); letter-spacing: .06em;
 }
 .reserve::before, .reserve::after {
   content: ""; flex: 1 1 auto; height: 1px; background: rgba(255,255,255,.4);
@@ -254,7 +283,7 @@ body.type-led .venue    { margin-top: auto; }
 /* ============ ZONE 7 â€” LEGAL ============ */
 .legal {
   text-align: center; margin-top: 20px;
-  font-weight: 600; font-size: 17px; line-height: 1.45;
+  font-weight: 600; font-size: calc(17px * var(--k)); line-height: 1.45;
   letter-spacing: .015em; opacity: .82;
 }
 
@@ -262,7 +291,7 @@ body.type-led .venue    { margin-top: auto; }
 .social {
   display: flex; justify-content: center; gap: 44px;
   margin-top: 20px;
-  font-weight: var(--t3-bold); font-size: 22px; letter-spacing: .05em;
+  font-weight: var(--t3-bold); font-size: calc(22px * var(--k)); letter-spacing: .05em;
 }
 .social span { display: inline-flex; align-items: center; gap: 10px; }
 .social svg { width: 26px; height: 26px; fill: var(--primary); }
@@ -273,7 +302,7 @@ body.type-led .venue    { margin-top: auto; }
   right: 26px; top: 50%;
   transform: translateY(-50%) rotate(180deg);
   writing-mode: vertical-rl;
-  font-weight: var(--t3-bold); font-size: 20px;
+  font-weight: var(--t3-bold); font-size: calc(20px * var(--k));
   letter-spacing: .35em; text-transform: uppercase; opacity: .72;
 }
 
