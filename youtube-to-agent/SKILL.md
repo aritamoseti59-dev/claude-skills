@@ -27,10 +27,11 @@ and the disagreement is the useful part.
   no key, it was exported into a shell profile after this shell started — read
   it back with `grep GEMINI_API_KEY ~/.zshrc ~/.zprofile ~/.zshenv` and pass it
   through `--key` rather than telling the user to set it again.
-- **Dependencies are not installed on this machine yet.** The Gemini pass needs
-  `google-genai` (`python3 -m pip install google-genai`); /watch needs `ffmpeg`,
-  which needs Homebrew first. Check both before Step 1 rather than discovering
-  it at Step 3.
+- **Dependencies are installed** (2026-08-20): `google-genai` for the Gemini
+  pass, and `ffmpeg` 7.1 on PATH for /watch. What is still missing is the
+  `GEMINI_API_KEY` itself — a free key comes from
+  https://aistudio.google.com/apikey. Check for the key before Step 1 rather
+  than discovering it at Step 3.
 
 ## Step 1: Scope before spending anything
 

@@ -24,16 +24,20 @@ usually harder to reconstruct — so this skill reads both, then reconciles.
   ones (`--output_format`, `--output_dir`). Do not mix them.
 - Use `python3`.
 - Multi-line commands continue with `\`, not `^`.
-- **Nothing in this pipeline is installed yet.** `uvx`, `yt-dlp`, `ffmpeg` and
-  every Whisper build are all absent from PATH. Install `uv` first
-  (`python3 -m pip install uv`, since miniforge Python is already here) and
-  `uvx` will fetch the rest on demand. Verify before Step 1 — the old note
-  claimed these were already present, which was true of a different machine.
+- **The pipeline is installed directly, not through `uvx`.** `yt-dlp`,
+  `mlx_whisper`, `ffmpeg` and `ffprobe` are all on PATH in the miniforge env
+  (installed 2026-08-20). Call them by name — there is no `uv`/`uvx` on this
+  machine, so any `uvx ...` command copied from the source guide will fail
+  with "command not found".
+- `ffmpeg` is the static build bundled by `imageio-ffmpeg`, symlinked into
+  `~/miniforge3/bin/ffmpeg`. It is a real ffmpeg 7.1 and handles everything
+  this pipeline needs; it is not a Homebrew install, so `brew upgrade` will
+  not touch it.
 
 ## Step 1: Fetch metadata (no download yet)
 
 ```
-uvx yt-dlp --skip-download --dump-json "<REEL_URL>"
+yt-dlp --skip-download --dump-json "<REEL_URL>"
 ```
 
 From the JSON keep: `description` (this is the caption), `uploader`, `channel`,
@@ -47,13 +51,13 @@ payload. Read it before deciding the reel is worthless.
 ## Step 2: Download the video
 
 ```
-uvx yt-dlp -f "best[ext=mp4]/best" -o "<workdir>/reel.%(ext)s" "<REEL_URL>"
+yt-dlp -f "best[ext=mp4]/best" -o "<workdir>/reel.%(ext)s" "<REEL_URL>"
 ```
 
 ## Step 3: Transcribe the audio locally
 
 ```
-uvx --from mlx-whisper mlx_whisper "<workdir>/reel.mp4" \
+mlx_whisper "<workdir>/reel.mp4" \
   --model mlx-community/whisper-large-v3-turbo \
   --output-format txt --output-dir "<workdir>" --language en
 ```
