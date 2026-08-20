@@ -17,13 +17,28 @@
   --red:     #E53935;
 
   /* ---- T1 display: the ONE thing that varies per event ----
-     Verified faces by voice (references/fonts.md):
+     Verified faces by voice (references/fonts.md).
+
+     Do NOT write a cross-platform fallback stack here. render.py measures
+     only the FIRST family in the computed stack, so listing a Windows face
+     ahead of a macOS one reports a false exit 2 on macOS. Set the family for
+     the machine you are on.
+
+     macOS (verified 2026-08-20, this machine):
+       premium  "Didot" | "Bodoni 72" | "Baskerville"/700 | "Hoefler Text"/700
+       hype     "Impact" | "DIN Condensed"/700 | "Futura"/700/condensed
+                | "Avenir Next Condensed"/800 | "Phosphate"
+       funk     "SignPainter" | "Marker Felt"/700 | "Chalkduster" | "Luminari"
+       blunt    "Futura"/700 | "Arial Black" | "Avenir Next"/800
+       tech     "DIN Alternate" | "DIN Condensed" | "Menlo"/700 | "Silom"
+
+     Windows (verified 2026-08-17, the other machine):
        premium  "Bodoni MT Condensed" | "Bodoni MT Black" | "Baskerville Old Face"
        hype     "Haettenschweiler" | "Impact" | "Bernard MT Condensed"
        funk     "Cooper Black" | "Bauhaus 93" | "Showcard Gothic"
        blunt    "Berlin Sans FB"/bold | "Franklin Gothic Heavy"
        tech     "Bahnschrift"/bold/condensed | "Agency FB"/bold          */
-  --t1-family:   "Bodoni MT Condensed";
+  --t1-family:   "Didot";                 /* Windows: "Bodoni MT Condensed" */
   --t1-weight:   400;
   --t1-stretch:  normal;
   --t1-size:     190px;
@@ -31,11 +46,11 @@
   --t1-tracking: -0.005em;
 
   /* ---- T2 script: connector only, never load-bearing information ---- */
-  --t2-family: "Freestyle Script";
+  --t2-family: "Snell Roundhand";     /* Windows: "Freestyle Script" */
   --t2-size:   88px;        /* keep cap height >= 42px or it degrades */
 
   /* ---- T3 utility: LOCKED. Same face on every poster, always. ---- */
-  --t3-family: "Segoe UI";
+  --t3-family: "Helvetica Neue";      /* Windows: "Segoe UI" */
   --t3-bold:   700;
   --t3-black:  900;
 }
@@ -105,6 +120,27 @@ html, body {
   display: flex; flex-direction: column;
 }
 .spacer { flex: 1 1 auto; }
+
+/* ---- Type-led cut: no talent photography ---------------------------
+   Zone 4 carries the poster in the reference set, so the spacer above
+   exists to let full-bleed bodies fill the middle. With no cutout, that
+   same rule holds open a dead band where the bodies should be -- the
+   slot look with nothing even in the slot.
+
+   A type-led poster is not "the normal layout minus the photo": the type
+   has to take over the mass the bodies would have held. So collapse the
+   spacer and let the title carry it. design-system.md 3 allows this --
+   the system carries a poster on zones 3 and 5 alone. */
+body.type-led .spacer   { display: none; }
+body.type-led .title    { font-size: calc(var(--t1-size) * 1.22); }
+body.type-led .credits  { margin-top: 5%; }
+body.type-led .stars    { margin: 4% 0; }
+/* Zones 6-9 stay pinned to the safe margin, exactly as with talent. Do not
+   reach for justify-content:center here -- it floats the venue lockup and
+   footer up off the bottom edge, which breaks the 6% safe margin that fixes
+   margin drift across the whole set (design-system.md 1). Let the slack fall
+   above the lockup instead, which is where the bodies would have been. */
+body.type-led .venue    { margin-top: auto; }
 
 /* ============ ZONE 1 â€” DATE CHIP ============ */
 .date {
